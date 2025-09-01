@@ -14,9 +14,7 @@ interface AuthFormProps {
 
 const AuthForm: React.FC<AuthFormProps> = ({ onClose }) => {
   const dispatch = useAppDispatch();
-  const { user, loading, error, emailConfirmationSent } = useAppSelector(
-    (state) => state.auth
-  );
+  const { user, loading, error } = useAppSelector((state) => state.auth);
 
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({
@@ -31,13 +29,6 @@ const AuthForm: React.FC<AuthFormProps> = ({ onClose }) => {
       onClose(); // Закрываем сразу без задержки
     }
   }, [user, onClose]);
-
-  // Автоматически закрываем модальное окно при отправке подтверждения email
-  useEffect(() => {
-    if (emailConfirmationSent && onClose) {
-      onClose(); // Закрываем модальное окно, покажем уведомление на главной странице
-    }
-  }, [emailConfirmationSent, onClose]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
