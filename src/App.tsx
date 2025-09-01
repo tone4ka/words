@@ -8,8 +8,8 @@ function App() {
     <Provider store={store}>
       <div className="App">
         <header className="App-header">
-          <h1>React + TypeScript + Vite + Redux Saga + Supabase</h1>
-          <p>Template Application</p>
+          <h1>Hi, Katusha:)</h1>
+          <p>English Dictionary</p>
         </header>
         <main>
           <AuthForm />
