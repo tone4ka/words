@@ -15,6 +15,8 @@ import HomePage from "../pages/HomePage";
 import DashboardPage from "../pages/DashboardPage";
 import WordListPage from "../pages/WordListPage";
 import EmailConfirmPage from "../pages/EmailConfirmPage";
+import CreateListPage from "../pages/CreateListPage";
+import EditListPage from "../pages/EditListPage";
 
 // Components
 import Navbar from "./Navbar";
@@ -102,6 +104,22 @@ const AppContent: React.FC = () => {
               element={
                 <ProtectedRoute>
                   <WordListPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/create-list"
+              element={
+                <ProtectedRoute>
+                  <CreateListPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/edit-list/:listName"
+              element={
+                <ProtectedRoute>
+                  <EditListPage />
                 </ProtectedRoute>
               }
             />
