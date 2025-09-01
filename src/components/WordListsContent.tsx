@@ -97,7 +97,10 @@ const WordListsContent: React.FC = () => {
             <div className="list-icon">📖</div>
             <h3>{listName}</h3>
             <div className="list-actions">
-              <Link to={`/word-list/${encodeURIComponent(listName)}`} className="view-btn">
+              <Link
+                to={`/word-list/${encodeURIComponent(listName)}`}
+                className="view-btn"
+              >
                 Открыть
               </Link>
               <button className="edit-btn">Редактировать</button>

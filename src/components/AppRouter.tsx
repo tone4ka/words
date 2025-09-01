@@ -1,24 +1,30 @@
-import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, useSearchParams, Navigate } from 'react-router-dom';
-import { Provider } from 'react-redux';
-import { store } from '../store';
-import { useAppSelector, useAppDispatch } from '../store/hooks';
+import React, { useEffect } from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useSearchParams,
+  Navigate,
+} from "react-router-dom";
+import { Provider } from "react-redux";
+import { store } from "../store";
+import { useAppSelector, useAppDispatch } from "../store/hooks";
 
 // Pages
-import HomePage from '../pages/HomePage';
-import DashboardPage from '../pages/DashboardPage';
-import WordListPage from '../pages/WordListPage';
-import EmailConfirmPage from '../pages/EmailConfirmPage';
+import HomePage from "../pages/HomePage";
+import DashboardPage from "../pages/DashboardPage";
+import WordListPage from "../pages/WordListPage";
+import EmailConfirmPage from "../pages/EmailConfirmPage";
 
 // Components
-import Navbar from './Navbar';
-import AuthForm from './AuthForm';
-import ProtectedRoute from './ProtectedRoute';
+import Navbar from "./Navbar";
+import AuthForm from "./AuthForm";
+import ProtectedRoute from "./ProtectedRoute";
 
 // Компонент для отображения модального окна логина на главной странице
 const HomePageWithLogin: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const showLogin = searchParams.get('login') === 'true';
+  const showLogin = searchParams.get("login") === "true";
   const { user, emailConfirmationSent } = useAppSelector((state) => state.auth);
 
   const handleCloseLogin = () => {
@@ -81,25 +87,25 @@ const AppContent: React.FC = () => {
             {/* Публичные маршруты */}
             <Route path="/" element={<HomePageWithLogin />} />
             <Route path="/email-confirm" element={<EmailConfirmPage />} />
-            
+
             {/* Защищённые маршруты */}
-            <Route 
-              path="/dashboard" 
+            <Route
+              path="/dashboard"
               element={
                 <ProtectedRoute>
                   <DashboardPage />
                 </ProtectedRoute>
-              } 
+              }
             />
-            <Route 
-              path="/word-list/:listName" 
+            <Route
+              path="/word-list/:listName"
               element={
                 <ProtectedRoute>
                   <WordListPage />
                 </ProtectedRoute>
-              } 
+              }
             />
-            
+
             {/* Редирект неизвестных маршрутов */}
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>

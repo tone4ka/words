@@ -1,6 +1,6 @@
-import React from 'react';
-import { Navigate } from 'react-router-dom';
-import { useAppSelector } from '../store/hooks';
+import React from "react";
+import { Navigate } from "react-router-dom";
+import { useAppSelector } from "../store/hooks";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;

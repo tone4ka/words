@@ -1,5 +1,5 @@
-import React from 'react';
-import WordListsContent from '../components/WordListsContent';
+import React from "react";
+import WordListsContent from "../components/WordListsContent";
 
 const DashboardPage: React.FC = () => {
   return <WordListsContent />;

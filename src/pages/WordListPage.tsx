@@ -1,5 +1,5 @@
-import React from 'react';
-import { useParams } from 'react-router-dom';
+import React from "react";
+import { useParams } from "react-router-dom";
 
 const WordListPage: React.FC = () => {
   const { listName } = useParams<{ listName: string }>();
