@@ -721,6 +721,181 @@ body {
   box-shadow: 0 8px 25px rgba(66, 153, 225, 0.5);
 }
 
+/* Word Lists Content Styles */
+.word-lists-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.loading-card,
+.error-card,
+.empty-state-card {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.2),
+    rgba(255, 255, 255, 0.1)
+  );
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
+  padding: 3rem;
+  text-align: center;
+  max-width: 500px;
+  margin: 2rem auto;
+}
+
+.loading-card h2,
+.error-card h2,
+.empty-state-card h2 {
+  font-size: 1.8rem;
+  color: white;
+  font-family: "Comic Sans MS", cursive;
+  margin-bottom: 1.5rem;
+}
+
+.loading-card p,
+.error-card p,
+.empty-state-card p {
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-family: "Comic Sans MS", cursive;
+  margin-bottom: 1.5rem;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  border-top: 4px solid white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.retry-btn,
+.add-list-btn {
+  background: linear-gradient(135deg, #4299e1, #63b3ed);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  font-family: "Comic Sans MS", cursive;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(66, 153, 225, 0.3);
+}
+
+.retry-btn:hover,
+.add-list-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(66, 153, 225, 0.4);
+}
+
+.word-lists-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.word-lists-header h2 {
+  font-size: 2rem;
+  color: white;
+  font-family: "Comic Sans MS", cursive;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.word-lists-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.word-list-card {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.2),
+    rgba(255, 255, 255, 0.1)
+  );
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
+  padding: 2rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.word-list-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.list-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.word-list-card h3 {
+  font-size: 1.4rem;
+  color: white;
+  font-family: "Comic Sans MS", cursive;
+  margin-bottom: 1.5rem;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.list-actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.view-btn,
+.edit-btn {
+  background: linear-gradient(135deg, #48bb78, #68d391);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  font-family: "Comic Sans MS", cursive;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(72, 187, 120, 0.3);
+}
+
+.edit-btn {
+  background: linear-gradient(135deg, #ed8936, #f6ad55);
+  box-shadow: 0 2px 8px rgba(237, 137, 54, 0.3);
+}
+
+.view-btn:hover,
+.edit-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(72, 187, 120, 0.4);
+}
+
+.edit-btn:hover {
+  box-shadow: 0 4px 12px rgba(237, 137, 54, 0.4);
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);

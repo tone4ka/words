@@ -6,9 +6,10 @@ import type {
   LoginCredentials,
   SignUpCredentials,
 } from "../../types";
+import { loadUserFromStorage, clearUserFromStorage } from "../../utils/auth";
 
 const initialState: AuthState = {
-  user: null,
+  user: loadUserFromStorage(),
   loading: false,
   error: null,
   emailConfirmationSent: false,
@@ -70,11 +71,29 @@ const authSlice = createSlice({
       state.user = null;
       state.loading = false;
       state.error = null;
+      clearUserFromStorage();
     },
 
     // Clear error
     clearError: (state) => {
       state.error = null;
+    },
+
+    // Check session validity
+    checkSession: (state) => {
+      const user = loadUserFromStorage();
+      if (user) {
+        state.user = user;
+      } else {
+        state.user = null;
+      }
+    },
+
+    // Session expired
+    sessionExpired: (state) => {
+      state.user = null;
+      state.error = "Session expired. Please log in again.";
+      clearUserFromStorage();
     },
   },
 });
@@ -90,6 +109,8 @@ export const {
   resetEmailConfirmation,
   logout,
   clearError,
+  checkSession,
+  sessionExpired,
 } = authSlice.actions;
 
 export default authSlice.reducer;

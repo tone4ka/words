@@ -1,18 +1,36 @@
 import { useState, useEffect } from "react";
-import { Provider, useSelector } from "react-redux";
+import { Provider, useSelector, useDispatch } from "react-redux";
 import { store } from "./store";
 import type { AppState } from "./types";
 import AuthForm from "./components/AuthForm";
 import Navbar from "./components/Navbar";
 import EmailConfirmationPage from "./components/EmailConfirmationPage";
+import WordListsContent from "./components/WordListsContent";
 import "./App.css";
 
 function AppContent() {
+  const dispatch = useDispatch();
   const [showLogin, setShowLogin] = useState(false);
   const [showEmailConfirmation, setShowEmailConfirmation] = useState(false);
-  const { emailConfirmationSent } = useSelector(
+  const { emailConfirmationSent, user } = useSelector(
     (state: AppState) => state.auth
   );
+
+  // Инициализация проверки сессии
+  useEffect(() => {
+    dispatch({ type: "auth/initializeAuth" });
+  }, [dispatch]);
+
+  // Периодическая проверка сессии (отдельный effect)
+  useEffect(() => {
+    if (!user) return;
+
+    const checkInterval = setInterval(() => {
+      dispatch({ type: "auth/checkSessionRequest" });
+    }, 15 * 60 * 1000); // 15 минут
+
+    return () => clearInterval(checkInterval);
+  }, [dispatch, user]); // Зависим от пользователя
 
   // Редирект на страницу подтверждения email
   useEffect(() => {
@@ -43,10 +61,12 @@ function AppContent() {
       <Navbar onLoginClick={handleLoginClick} />
 
       <div className="app-content">
-        <header className="App-header">
-          <h1>English Dictionary</h1>
-          <p>Изучай английские слова весело!</p>
-        </header>
+        {!user && (
+          <header className="App-header">
+            <h1>English Dictionary</h1>
+            <p>Изучай английские слова весело!</p>
+          </header>
+        )}
 
         <main>
           {showLogin && (
@@ -63,7 +83,7 @@ function AppContent() {
             </div>
           )}
 
-          {!showLogin && (
+          {!showLogin && !user && (
             <div className="welcome-content">
               <div className="fun-card">
                 <h2>🌟 Добро пожаловать! 🌟</h2>
@@ -72,6 +92,8 @@ function AppContent() {
               </div>
             </div>
           )}
+
+          {!showLogin && user && <WordListsContent />}
         </main>
       </div>
     </div>

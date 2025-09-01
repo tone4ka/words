@@ -5,6 +5,17 @@ export interface User {
   avatar_url?: string;
 }
 
+export interface WordList {
+  list_name: string;
+}
+
+export interface WordsState {
+  wordLists: string[];
+  loading: boolean;
+  error: string | null;
+  lastFetchTime: number | null;
+}
+
 export interface AuthState {
   user: User | null;
   loading: boolean;
@@ -15,6 +26,7 @@ export interface AuthState {
 
 export interface AppState {
   auth: AuthState;
+  words: WordsState;
 }
 
 export interface LoginCredentials {
