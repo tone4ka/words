@@ -9,6 +9,8 @@ export interface AuthState {
   user: User | null;
   loading: boolean;
   error: string | null;
+  emailConfirmationSent: boolean;
+  pendingEmail: string | null;
 }
 
 export interface AppState {

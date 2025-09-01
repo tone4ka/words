@@ -1,15 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import {
   loginRequest,
   signupRequest,
   clearError,
+  resetEmailConfirmation,
 } from "../store/slices/authSlice";
 import type { LoginCredentials, SignUpCredentials } from "../types";
 
-const AuthForm: React.FC = () => {
+interface AuthFormProps {
+  onClose?: () => void;
+}
+
+const AuthForm: React.FC<AuthFormProps> = ({ onClose }) => {
   const dispatch = useAppDispatch();
-  const { user, loading, error } = useAppSelector((state) => state.auth);
+  const { user, loading, error, emailConfirmationSent } = useAppSelector(
+    (state) => state.auth
+  );
 
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({
@@ -17,6 +24,20 @@ const AuthForm: React.FC = () => {
     password: "",
     name: "",
   });
+
+  // Автоматически закрываем модальное окно при успешном логине
+  useEffect(() => {
+    if (user && onClose) {
+      onClose(); // Закрываем сразу без задержки
+    }
+  }, [user, onClose]);
+
+  // Автоматически закрываем модальное окно при отправке подтверждения email
+  useEffect(() => {
+    if (emailConfirmationSent && onClose) {
+      onClose(); // Закрываем модальное окно, покажем уведомление на главной странице
+    }
+  }, [emailConfirmationSent, onClose]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -53,25 +74,9 @@ const AuthForm: React.FC = () => {
   const toggleMode = () => {
     setIsLogin(!isLogin);
     dispatch(clearError());
+    dispatch(resetEmailConfirmation());
     setFormData({ email: "", password: "", name: "" });
   };
-
-  if (user) {
-    return (
-      <div className="auth-container">
-        <div className="welcome-card">
-          <h2>Welcome, {user.name || user.email}!</h2>
-          <p>You are successfully logged in.</p>
-          <button
-            onClick={() => dispatch({ type: "auth/logoutRequest" })}
-            className="logout-btn"
-          >
-            Logout
-          </button>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="auth-container">

@@ -8,6 +8,7 @@ import {
   signupRequest,
   signupSuccess,
   signupFailure,
+  emailConfirmationSent,
   logout,
 } from "../slices/authSlice";
 import type { LoginCredentials, SignUpCredentials } from "../../types";
@@ -52,7 +53,14 @@ function* signupSaga(action: PayloadAction<SignUpCredentials>) {
 
     if (error) throw error;
 
-    if (data.user) {
+    // Если пользователь создан, но требует подтверждение email
+    if (data.user && !data.session) {
+      yield put(emailConfirmationSent(email));
+      return;
+    }
+
+    // Если пользователь сразу авторизован (email уже подтвержден)
+    if (data.user && data.session) {
       const user = {
         id: data.user.id,
         email: data.user.email || "",

@@ -11,6 +11,8 @@ const initialState: AuthState = {
   user: null,
   loading: false,
   error: null,
+  emailConfirmationSent: false,
+  pendingEmail: null,
 };
 
 const authSlice = createSlice({
@@ -36,15 +38,31 @@ const authSlice = createSlice({
     signupRequest: (state, _action: PayloadAction<SignUpCredentials>) => {
       state.loading = true;
       state.error = null;
+      state.emailConfirmationSent = false;
     },
     signupSuccess: (state, action: PayloadAction<User>) => {
       state.loading = false;
       state.user = action.payload;
       state.error = null;
+      state.emailConfirmationSent = false;
+      state.pendingEmail = null;
     },
     signupFailure: (state, action: PayloadAction<string>) => {
       state.loading = false;
       state.error = action.payload;
+      state.emailConfirmationSent = false;
+    },
+
+    // Email confirmation
+    emailConfirmationSent: (state, action: PayloadAction<string>) => {
+      state.loading = false;
+      state.emailConfirmationSent = true;
+      state.pendingEmail = action.payload;
+      state.error = null;
+    },
+    resetEmailConfirmation: (state) => {
+      state.emailConfirmationSent = false;
+      state.pendingEmail = null;
     },
 
     // Logout action
@@ -68,6 +86,8 @@ export const {
   signupRequest,
   signupSuccess,
   signupFailure,
+  emailConfirmationSent,
+  resetEmailConfirmation,
   logout,
   clearError,
 } = authSlice.actions;
