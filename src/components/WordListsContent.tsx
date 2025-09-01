@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useCallback } from "react";
+import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import {
   fetchWordListsRequest,
@@ -96,7 +97,9 @@ const WordListsContent: React.FC = () => {
             <div className="list-icon">📖</div>
             <h3>{listName}</h3>
             <div className="list-actions">
-              <button className="view-btn">Открыть</button>
+              <Link to={`/word-list/${encodeURIComponent(listName)}`} className="view-btn">
+                Открыть
+              </Link>
               <button className="edit-btn">Редактировать</button>
             </div>
           </div>

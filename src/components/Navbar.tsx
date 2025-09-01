@@ -1,18 +1,21 @@
 import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../store/hooks";
 
-interface NavbarProps {
-  onLoginClick: () => void;
-}
-
-const Navbar: React.FC<NavbarProps> = ({ onLoginClick }) => {
+const Navbar: React.FC = () => {
   const { user } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const [showDropdown, setShowDropdown] = useState(false);
 
   const handleLogout = () => {
     dispatch({ type: "auth/logoutRequest" });
     setShowDropdown(false);
+    navigate("/");
+  };
+
+  const handleLoginClick = () => {
+    navigate("/?login=true");
   };
 
   const toggleDropdown = () => {
@@ -28,7 +31,9 @@ const Navbar: React.FC<NavbarProps> = ({ onLoginClick }) => {
     <nav className="navbar">
       <div className="navbar-content">
         <div className="navbar-left">
-          <h2 className="app-title">Hi, Katusha:)</h2>
+          <Link to={user ? "/dashboard" : "/"} className="app-title-link">
+            <h2 className="app-title">Hi, Katusha:)</h2>
+          </Link>
         </div>
 
         <div className="navbar-right">
@@ -52,7 +57,7 @@ const Navbar: React.FC<NavbarProps> = ({ onLoginClick }) => {
                 )}
               </div>
             ) : (
-              <button className="login-link" onClick={onLoginClick}>
+              <button className="login-link" onClick={handleLoginClick}>
                 Войти
               </button>
             )}

@@ -57,6 +57,16 @@ body {
   align-items: center;
 }
 
+.navbar-left .app-title-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.navbar-left .app-title-link:hover {
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+}
+
 .navbar-left .app-title {
   margin: 0;
   font-size: 1.8rem;
@@ -608,12 +618,12 @@ body {
 
 /* Email Confirmation Page Styles */
 .email-confirmation-page {
-  min-height: 100vh;
+  min-height: calc(100vh - 80px); /* Учитываем высоту navbar */
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 2rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  /* Убираем отдельный фон, используем общий фон приложения */
 }
 
 .email-confirmation-container {
@@ -879,6 +889,9 @@ body {
   font-size: 0.9rem;
   transition: all 0.3s ease;
   box-shadow: 0 2px 8px rgba(72, 187, 120, 0.3);
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
 }
 
 .edit-btn {
