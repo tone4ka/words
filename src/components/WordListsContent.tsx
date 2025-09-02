@@ -21,12 +21,16 @@ const WordListsContent: React.FC = () => {
   const deleteWordList = async (listName: string) => {
     if (!user || deletingLists.has(listName)) return;
 
-    if (!window.confirm(`Вы уверены, что хотите удалить список "${listName}"? Это действие нельзя отменить.`)) {
+    if (
+      !window.confirm(
+        `Вы уверены, что хотите удалить список "${listName}"? Это действие нельзя отменить.`
+      )
+    ) {
       return;
     }
 
     try {
-      setDeletingLists(prev => new Set([...prev, listName]));
+      setDeletingLists((prev) => new Set([...prev, listName]));
 
       const { error } = await supabase
         .from("words")
@@ -42,7 +46,7 @@ const WordListsContent: React.FC = () => {
       console.error("Error deleting word list:", error);
       alert("Ошибка при удалении списка. Попробуйте еще раз.");
     } finally {
-      setDeletingLists(prev => {
+      setDeletingLists((prev) => {
         const newSet = new Set(prev);
         newSet.delete(listName);
         return newSet;
@@ -135,14 +139,14 @@ const WordListsContent: React.FC = () => {
           .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
           .map((listName) => {
             const isDeleting = deletingLists.has(listName);
-            
+
             return (
               <div key={listName} className="word-list-card">
                 <div className="list-icon">📖</div>
                 <h3>{listName}</h3>
                 <div className="list-actions">
                   <Link
-                    to={`/word-list/${encodeURIComponent(listName)}`}
+                    to={`/word-list/${encodeUrlSafe(listName)}`}
                     className="view-btn"
                     title="Открыть список"
                   >
