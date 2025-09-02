@@ -22,6 +22,7 @@ import EditListPage from "../pages/EditListPage";
 import Navbar from "./Navbar";
 import AuthForm from "./AuthForm";
 import ProtectedRoute from "./ProtectedRoute";
+import HomeButton from "./HomeButton";
 
 // Компонент для отображения модального окна логина на главной странице
 const HomePageWithLogin: React.FC = () => {
@@ -129,6 +130,7 @@ const AppContent: React.FC = () => {
           </Routes>
         </main>
       </div>
+      <HomeButton />
     </div>
   );
 };

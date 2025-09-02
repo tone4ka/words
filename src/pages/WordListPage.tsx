@@ -18,9 +18,31 @@ interface ClickResult {
   isCorrect: boolean;
 }
 
+// Функция для сохранения статистики
+const saveGameStatistics = async (userId: string, wordsCount: number) => {
+  try {
+    const { error } = await supabase.from("statistic").insert([
+      {
+        words_count: wordsCount,
+        created_at: new Date().toISOString(),
+        user_id: userId,
+      },
+    ]);
+
+    if (error) {
+      console.error("Error saving game statistics:", error);
+    } else {
+      console.log("Game statistics saved successfully");
+    }
+  } catch (error) {
+    console.error("Error saving game statistics:", error);
+  }
+};
+
 const WordListPage: React.FC = () => {
   const { listName: encodedListName } = useParams<{ listName: string }>();
   const { user } = useAppSelector((state) => state.auth);
+
   const [actualListName, setActualListName] = useState<string>("");
   const [wordPairs, setWordPairs] = useState<WordPair[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -379,8 +401,8 @@ const WordListPage: React.FC = () => {
   useEffect(() => {
     if (gameStep === 3) {
       window.addEventListener("keydown", handleKeyPress);
-      return () => window.removeEventListener("keydown", handleKeyPress);
     }
+    return () => window.removeEventListener("keydown", handleKeyPress);
   }, [gameStep, handleKeyPress]);
 
   // Автофокус инпута на четвертом шаге при смене пар
@@ -417,7 +439,11 @@ const WordListPage: React.FC = () => {
       // Проверяем, изучены ли все пары
       if (step4StudiedPairs.size + 1 >= wordPairs.length) {
         // Все пары изучены - игра завершена
-        setTimeout(() => {
+        setTimeout(async () => {
+          // Сохраняем статистику в Supabase
+          if (user?.id) {
+            await saveGameStatistics(user.id, wordPairs.length);
+          }
           setGameCompleted(true);
         }, 500);
       } else {
@@ -446,6 +472,7 @@ const WordListPage: React.FC = () => {
     step4StudiedPairs,
     getNextUnstudiedPairExcludingCurrent,
     initializeStep4,
+    user,
   ]);
 
   const handleStep4Next = useCallback(() => {
@@ -747,21 +774,11 @@ const WordListPage: React.FC = () => {
   if (gameCompleted) {
     return (
       <div className="word-list-page">
-        <div className="fun-card">
-          <h2>🎉 Поздравляем!</h2>
-          <p>
-            Вы успешно завершили все три шага изучения слов из списка "
-            {actualListName}"!
-          </p>
-          <div className="completion-details">
-            <p>✅ Шаг 1: Обратный перевод - завершен</p>
-            <p>✅ Шаг 2: Перевод слов - завершен</p>
-            <p>✅ Шаг 3: Ввод по буквам - завершен</p>
-            <p>Всего изучено: {wordPairs.length} слов</p>
+        <div className="fun-card game-completion">
+          <h1 className="super-title">🎉 Ты - супер! 🎉</h1>
+          <div className="dancing-cat">
+            <img src="/CAT.png" alt="Dancing cat" className="cat-image" />
           </div>
-          <button onClick={startGame} className="game-restart-btn">
-            🔄 Начать заново
-          </button>
         </div>
       </div>
     );
