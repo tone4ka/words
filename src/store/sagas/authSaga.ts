@@ -53,6 +53,7 @@ function* loginSaga(action: PayloadAction<LoginCredentials>) {
 function* signupSaga(action: PayloadAction<SignUpCredentials>) {
   try {
     const { email, password, name } = action.payload;
+
     const { data, error } = yield call([supabase.auth, "signUp"], {
       email,
       password,
@@ -60,6 +61,9 @@ function* signupSaga(action: PayloadAction<SignUpCredentials>) {
         data: {
           name,
         },
+        emailRedirectTo: `${
+          import.meta.env.VITE_APP_URL || window.location.origin
+        }`,
       },
     });
 

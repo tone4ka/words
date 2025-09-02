@@ -82,21 +82,28 @@ const CreateListPage: React.FC = () => {
     if (!listName.trim()) {
       newErrors.listName = "Введите имя списка";
     } else {
-      try {
-        const { data, error } = await supabase
-          .from("words")
-          .select("list_name")
-          .eq("list_name", listName.trim())
-          .limit(1);
+      // Проверка допустимых символов (только латинские буквы, цифры, пробелы и дефисы)
+      const allowedCharsRegex = /^[a-zA-Z0-9\s-]+$/;
+      if (!allowedCharsRegex.test(listName.trim())) {
+        newErrors.listName =
+          "Имя списка может содержать только латинские буквы, цифры, пробелы и дефисы";
+      } else {
+        try {
+          const { data, error } = await supabase
+            .from("words")
+            .select("list_name")
+            .eq("list_name", listName.trim())
+            .limit(1);
 
-        if (error) throw error;
+          if (error) throw error;
 
-        if (data && data.length > 0) {
-          newErrors.listName = "Список с таким именем уже существует";
+          if (data && data.length > 0) {
+            newErrors.listName = "Список с таким именем уже существует";
+          }
+        } catch (error) {
+          console.error("Error checking list name:", error);
+          newErrors.general = "Ошибка при проверке имени списка";
         }
-      } catch (error) {
-        console.error("Error checking list name:", error);
-        newErrors.general = "Ошибка при проверке имени списка";
       }
     }
 
