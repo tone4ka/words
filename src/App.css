@@ -838,6 +838,235 @@ body {
   box-shadow: 0 6px 20px rgba(66, 153, 225, 0.4);
 }
 
+/* Стили для кнопок в хедере */
+.header-actions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.statistics-btn {
+  background: none;
+  border: none;
+  color: #2c5282;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: color 0.3s ease;
+  font-family: inherit;
+}
+
+.statistics-btn:hover {
+  color: #2a4365;
+}
+
+/* Стили для модального окна статистики */
+.statistics-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.statistics-modal {
+  background: white;
+  border-radius: 20px;
+  padding: 2rem;
+  max-width: 1200px;
+  width: 95%;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+.statistics-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 1rem;
+  flex-shrink: 0;
+}
+
+.statistics-modal-header h2 {
+  font-size: 1.8rem;
+  color: #2d3748;
+  margin: 0;
+}
+
+.statistics-close-btn {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: #a0aec0;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.statistics-close-btn:hover {
+  color: #718096;
+}
+
+.statistics-controls {
+  margin-bottom: 2rem;
+  flex-shrink: 0;
+}
+
+.statistics-period-select {
+  padding: 0.5rem 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 1rem;
+  background: white;
+  cursor: pointer;
+}
+
+.statistics-chart {
+  display: flex;
+  flex: 1;
+  min-height: 300px;
+  max-height: 500px;
+  gap: 1rem;
+}
+
+.chart-y-axis {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+  width: 50px;
+  padding-right: 1rem;
+  color: #718096;
+  font-size: 0.875rem;
+}
+
+.chart-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  border-left: 2px solid #e2e8f0;
+  border-bottom: 2px solid #e2e8f0;
+  position: relative;
+}
+
+.chart-bars {
+  display: flex;
+  align-items: flex-end;
+  height: 100%;
+  gap: 2px;
+  padding: 0 0.5rem;
+}
+
+.chart-bar-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  flex: 1;
+  height: 100%;
+}
+
+.chart-bar {
+  width: 100%;
+  max-width: 40px;
+  background: #4299e1;
+  border-radius: 4px 4px 0 0;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+}
+
+.chart-bar:hover {
+  background: #3182ce;
+}
+
+/* Тултип для графика */
+.chart-bar::before {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  pointer-events: none;
+  z-index: 1000;
+  margin-bottom: 0.5rem;
+}
+
+.chart-bar::after {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: rgba(0, 0, 0, 0.9);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  pointer-events: none;
+  z-index: 1000;
+  margin-bottom: -0.5rem;
+}
+
+.chart-bar:hover::before,
+.chart-bar:hover::after {
+  opacity: 1;
+  visibility: visible;
+}
+
+.chart-label {
+  font-size: 0.75rem;
+  color: #718096;
+  text-align: center;
+  writing-mode: horizontal-tb;
+  white-space: nowrap;
+  transform: rotate(-45deg);
+  transform-origin: center;
+  margin-top: 0.5rem;
+}
+
+/* Адаптивность для мобильных */
+@media (max-width: 768px) {
+  .header-actions {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .statistics-modal {
+    width: 95%;
+    padding: 1rem;
+    max-height: 90vh;
+  }
+
+  .statistics-chart {
+    min-height: 250px;
+    max-height: 400px;
+  }
+
+  .chart-label {
+    font-size: 0.6rem;
+  }
+}
+
 .word-lists-header {
   display: flex;
   justify-content: space-between;

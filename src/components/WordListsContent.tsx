@@ -7,6 +7,7 @@ import {
 } from "../store/slices/wordsSlice";
 import { encodeUrlSafe } from "../utils/urlSafe";
 import { supabase } from "../services/supabase";
+import StatisticsModal from "./StatisticsModal";
 
 const WordListsContent: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -17,6 +18,7 @@ const WordListsContent: React.FC = () => {
   const hasFetchedRef = useRef(false);
   const currentUserIdRef = useRef<string | null>(null);
   const [deletingLists, setDeletingLists] = useState<Set<string>>(new Set());
+  const [isStatisticsModalOpen, setIsStatisticsModalOpen] = useState(false);
 
   const deleteWordList = async (listName: string) => {
     if (!user || deletingLists.has(listName)) return;
@@ -129,9 +131,17 @@ const WordListsContent: React.FC = () => {
     <div className="word-lists-container">
       <div className="word-lists-header">
         <h2>📚 Твои списки слов</h2>
-        <Link to="/create-list" className="add-list-btn">
-          + Добавить список
-        </Link>
+        <div className="header-actions">
+          <button
+            className="statistics-btn"
+            onClick={() => setIsStatisticsModalOpen(true)}
+          >
+            Статистика
+          </button>
+          <Link to="/create-list" className="add-list-btn">
+            + Добавить список
+          </Link>
+        </div>
       </div>
 
       <div className="word-lists-grid">
@@ -174,6 +184,11 @@ const WordListsContent: React.FC = () => {
             );
           })}
       </div>
+
+      <StatisticsModal
+        isOpen={isStatisticsModalOpen}
+        onClose={() => setIsStatisticsModalOpen(false)}
+      />
     </div>
   );
 };
