@@ -18,7 +18,6 @@ const StatisticsModal: React.FC<StatisticsModalProps> = ({
 }) => {
   const { user } = useAppSelector((state) => state.auth);
   const [period, setPeriod] = useState<"month" | "year">("month");
-  const [statisticsData, setStatisticsData] = useState<StatisticData[]>([]);
   const [chartData, setChartData] = useState<
     { label: string; value: number }[]
   >([]);
@@ -41,7 +40,6 @@ const StatisticsModal: React.FC<StatisticsModalProps> = ({
 
       if (error) throw error;
 
-      setStatisticsData(data || []);
       processChartData(data || []);
     } catch (error) {
       console.error("Error fetching statistics:", error);

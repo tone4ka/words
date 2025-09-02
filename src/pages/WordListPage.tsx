@@ -48,6 +48,26 @@ const WordListPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string>("");
 
+  // Функция для озвучивания текста
+  const speakText = useCallback((text: string) => {
+    // Проверяем поддержку Speech Synthesis API
+    if ("speechSynthesis" in window) {
+      // Останавливаем предыдущее воспроизведение, если оно есть
+      window.speechSynthesis.cancel();
+
+      const utterance = new SpeechSynthesisUtterance(text);
+
+      // Настройки голоса
+      utterance.lang = "en-US"; // Английский язык для лучшего произношения английских слов
+      utterance.rate = 0.8; // Немного медленнее для лучшего понимания
+      utterance.pitch = 1;
+      utterance.volume = 0.8;
+
+      // Воспроизводим
+      window.speechSynthesis.speak(utterance);
+    }
+  }, []);
+
   // Игровые состояния
   const [studiedPairs, setStudiedPairs] = useState<Set<number>>(new Set());
   const [currentPairIndex, setCurrentPairIndex] = useState<number>(0);
@@ -285,14 +305,20 @@ const WordListPage: React.FC = () => {
 
         // Проверяем, заполнены ли все слоты
         if (newSlots.every((slot) => slot !== "")) {
-          // Слово собрано
+          // Слово собрано - сохраняем текущий индекс для озвучки
+          const currentWordToSpeak = wordPairs[currentPairIndex].value;
+
           setTimeout(() => {
             if (!hasError) {
-              // Без ошибок - помечаем как изученное
+              // Без ошибок - помечаем как изученное и озвучиваем
               console.log(
                 "Step 3: Word completed without errors, marking as studied"
               );
               console.log("Current pair index:", currentPairIndex);
+
+              // Озвучиваем правильно собранное слово (используем сохраненное значение)
+              speakText(currentWordToSpeak);
+
               setStep3StudiedPairs((prevStudiedPairs) => {
                 const newStudiedPairs = new Set(prevStudiedPairs);
                 newStudiedPairs.add(currentPairIndex);
@@ -312,7 +338,7 @@ const WordListPage: React.FC = () => {
                     setGameAnswers([]);
                     initializeStep4();
                     setLastClickResult(null);
-                  }, 1000);
+                  }, 2000); // Увеличиваем задержку для озвучки
 
                   return newStudiedPairs;
                 }
@@ -328,7 +354,7 @@ const WordListPage: React.FC = () => {
                     setCurrentPairIndex(nextIndex);
                     initializeStep3(wordPairs[nextIndex]);
                   }
-                }, 100);
+                }, 5000); // Увеличиваем задержку для озвучки
 
                 return newStudiedPairs;
               });
@@ -349,9 +375,9 @@ const WordListPage: React.FC = () => {
                   setCurrentPairIndex(nextIndex);
                   initializeStep3(wordPairs[nextIndex]);
                 }
-              }, 100);
+              }, 1000); // Оставляем 1 секунду для случая с ошибкой
             }
-          }, 1000);
+          }, 2000); // Увеличиваем основную задержку для озвучки
         }
       } else {
         // Неправильная буква
@@ -382,6 +408,7 @@ const WordListPage: React.FC = () => {
       getNextUnstudiedPairExcludingCurrent,
       initializeStep3,
       initializeStep4,
+      speakText,
     ]
   );
 
@@ -428,6 +455,12 @@ const WordListPage: React.FC = () => {
       // Правильный ответ - подсвечиваем зеленым на полсекунды
       setInputHighlight("correct");
 
+      // Сохраняем текущее слово для озвучки
+      const currentWordToSpeak = wordPairs[currentPairIndex].value;
+
+      // Озвучиваем правильный ответ
+      speakText(currentWordToSpeak);
+
       // Сбрасываем зеленую подсветку через полсекунды
       setTimeout(() => {
         setInputHighlight(null);
@@ -445,7 +478,7 @@ const WordListPage: React.FC = () => {
             await saveGameStatistics(user.id, wordPairs.length);
           }
           setGameCompleted(true);
-        }, 500);
+        }, 2000); // Увеличиваем задержку для озвучки
       } else {
         // Ищем следующую неизученную пару
         setTimeout(() => {
@@ -457,7 +490,7 @@ const WordListPage: React.FC = () => {
             setCurrentPairIndex(nextIndex);
             initializeStep4();
           }
-        }, 500);
+        }, 2000); // Увеличиваем задержку для озвучки
       }
     } else {
       // Неправильный ответ - подсвечиваем красным и показываем правильный ответ
@@ -473,6 +506,7 @@ const WordListPage: React.FC = () => {
     getNextUnstudiedPairExcludingCurrent,
     initializeStep4,
     user,
+    speakText,
   ]);
 
   const handleStep4Next = useCallback(() => {
@@ -504,6 +538,14 @@ const WordListPage: React.FC = () => {
       });
 
       if (answer.isCorrect) {
+        // Сохраняем текущее слово для озвучки
+        const currentWordToSpeak = wordPairs[currentPairIndex].value;
+
+        // Озвучиваем правильный ответ на первом и втором шагах
+        if (gameStep === 1 || gameStep === 2) {
+          speakText(currentWordToSpeak);
+        }
+
         // Определяем текущий набор изученных пар
         const setCurrentStudiedPairs =
           gameStep === 1 ? setStudiedPairs : setStep2StudiedPairs;
@@ -527,7 +569,7 @@ const WordListPage: React.FC = () => {
                   createGameAnswers(wordPairs[firstIndex], wordPairs, 2)
                 );
                 setLastClickResult(null);
-              }, 1000);
+              }, 2000); // Увеличиваем задержку для озвучки
             } else if (gameStep === 2) {
               // Переходим к третьему шагу (ввод по буквам)
               setGameStep(3);
@@ -539,7 +581,7 @@ const WordListPage: React.FC = () => {
                 setGameAnswers([]);
                 initializeStep3(wordPairs[firstIndex]);
                 setLastClickResult(null);
-              }, 1000);
+              }, 2000); // Увеличиваем задержку для озвучки
             } else if (gameStep === 3) {
               // Переходим к четвертому шагу (ввод текста)
               setGameStep(4);
@@ -551,7 +593,7 @@ const WordListPage: React.FC = () => {
                 setGameAnswers([]);
                 initializeStep4();
                 setLastClickResult(null);
-              }, 1000);
+              }, 2000); // Увеличиваем задержку для озвучки
             } else {
               // Игра завершена
               setGameCompleted(true);
@@ -569,7 +611,7 @@ const WordListPage: React.FC = () => {
               );
             }
             setLastClickResult(null);
-          }, 1000);
+          }, 2000); // Увеличиваем задержку для озвучки
 
           return newStudiedPairs;
         });
@@ -590,7 +632,7 @@ const WordListPage: React.FC = () => {
             );
           }
           setLastClickResult(null);
-        }, 1000);
+        }, 2000); // Увеличиваем задержку
       }
     },
     [
@@ -604,6 +646,7 @@ const WordListPage: React.FC = () => {
       createGameAnswers,
       initializeStep3,
       initializeStep4,
+      speakText,
     ]
   );
 
