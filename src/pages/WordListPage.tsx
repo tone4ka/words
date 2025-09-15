@@ -338,7 +338,7 @@ const WordListPage: React.FC = () => {
                     setGameAnswers([]);
                     initializeStep4();
                     setLastClickResult(null);
-                  }, 2000); // Увеличиваем задержку для озвучки
+                  }, 0); // Увеличиваем задержку для озвучки
 
                   return newStudiedPairs;
                 }
@@ -354,11 +354,12 @@ const WordListPage: React.FC = () => {
                     setCurrentPairIndex(nextIndex);
                     initializeStep3(wordPairs[nextIndex]);
                   }
-                }, 5000); // Увеличиваем задержку для озвучки
+                }, 3000); // Увеличиваем задержку для озвучки
 
                 return newStudiedPairs;
               });
             } else {
+              speakText(currentWordToSpeak);
               // С ошибками - переходим к другой паре, исключая текущую
               console.log(
                 "Step 3: Word completed with errors, current pair stays unstudied"
@@ -377,7 +378,7 @@ const WordListPage: React.FC = () => {
                 }
               }, 1000); // Оставляем 1 секунду для случая с ошибкой
             }
-          }, 2000); // Увеличиваем основную задержку для озвучки
+          }, 0); // Увеличиваем основную задержку для озвучки
         }
       } else {
         // Неправильная буква
