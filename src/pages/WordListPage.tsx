@@ -102,7 +102,6 @@ const WordListPage: React.FC = () => {
   // Состояния для четвертого шага (ввод текста)
   const [textInput, setTextInput] = useState<string>("");
   const [showCorrectAnswer, setShowCorrectAnswer] = useState<boolean>(false);
-  const [isAnswerCorrect, setIsAnswerCorrect] = useState<boolean | null>(null);
   const [showNextButton, setShowNextButton] = useState<boolean>(false);
   const [inputHighlight, setInputHighlight] = useState<
     "correct" | "incorrect" | null
@@ -275,7 +274,6 @@ const WordListPage: React.FC = () => {
   const initializeStep4 = useCallback(() => {
     setTextInput("");
     setShowCorrectAnswer(false);
-    setIsAnswerCorrect(null);
     setShowNextButton(false);
     setInputHighlight(null);
   }, []);
@@ -449,8 +447,6 @@ const WordListPage: React.FC = () => {
       .trim();
     const userAnswer = textInput.toLowerCase().trim();
     const isCorrect = userAnswer === correctAnswer;
-
-    setIsAnswerCorrect(isCorrect);
 
     if (isCorrect) {
       // Правильный ответ - подсвечиваем зеленым на полсекунды
@@ -938,7 +934,6 @@ const WordListPage: React.FC = () => {
                   inputHighlight === "correct" ? "input-correct" : ""
                 } ${inputHighlight === "incorrect" ? "input-incorrect" : ""}`}
                 placeholder="Введите слово..."
-                disabled={showCorrectAnswer && isAnswerCorrect === false}
                 onKeyPress={(e) => {
                   if (e.key === "Enter" && !showNextButton) {
                     handleTextSubmit();
@@ -946,7 +941,7 @@ const WordListPage: React.FC = () => {
                 }}
               />
 
-              {showCorrectAnswer && isAnswerCorrect === false && (
+              {showCorrectAnswer && (
                 <div className="correct-answer-display">
                   Правильный ответ: {wordPairs[currentPairIndex]?.value}
                 </div>
