@@ -22,7 +22,7 @@ const CreateListPage: React.FC = () => {
   const { user } = useAppSelector((state) => state.auth);
   const [listName, setListName] = useState("");
   const [wordPairs, setWordPairs] = useState<WordPair[]>(
-    Array.from({ length: 20 }, (_, index) => ({
+    Array.from({ length: 5 }, (_, index) => ({
       id: `pair-${index}`,
       word: "",
       translation: "",
@@ -49,11 +49,6 @@ const CreateListPage: React.FC = () => {
     };
     setWordPairs([...wordPairs, newPair]);
   };
-
-  // Проверяем, заполнены ли все первые 20 пар
-  const areFirst20PairsFilled = wordPairs
-    .slice(0, 20)
-    .every((pair) => pair.word.trim() && pair.translation.trim());
 
   // Функция для проверки дубликатов слов
   const getDuplicateWords = (): Set<string> => {
@@ -283,18 +278,16 @@ const CreateListPage: React.FC = () => {
             )}
 
             {/* Кнопка добавления слова */}
-            {areFirst20PairsFilled && (
-              <div className="add-word-section">
-                <button
-                  type="button"
-                  onClick={addNewWordPair}
-                  className="add-word-btn"
-                  disabled={isLoading}
-                >
-                  ➕ Добавить слово
-                </button>
-              </div>
-            )}
+            <div className="add-word-section">
+              <button
+                type="button"
+                onClick={addNewWordPair}
+                className="add-word-btn"
+                disabled={isLoading}
+              >
+                ➕ Добавить слово
+              </button>
+            </div>
           </div>
 
           {/* Общие ошибки */}

@@ -134,8 +134,8 @@ const EditListPage: React.FC = () => {
             originalTranslation: record.translation || "",
           }));
 
-          // Добавляем пустые пары до 20, если нужно
-          while (pairs.length < 20) {
+          // Добавляем пустые пары до минимум 5, если нужно
+          while (pairs.length < 5) {
             pairs.push({
               id: `pair-${pairs.length}`,
               word: "",
@@ -181,11 +181,6 @@ const EditListPage: React.FC = () => {
     };
     setWordPairs([...wordPairs, newPair]);
   };
-
-  // Проверяем, заполнены ли все первые 20 пар
-  const areFirst20PairsFilled = wordPairs
-    .slice(0, 20)
-    .every((pair) => pair.word.trim() && pair.translation.trim());
 
   // Функция для проверки дубликатов слов
   const getDuplicateWords = (): Set<string> => {
@@ -505,18 +500,16 @@ const EditListPage: React.FC = () => {
             )}
 
             {/* Кнопка добавления слова */}
-            {areFirst20PairsFilled && (
-              <div className="add-word-section">
-                <button
-                  type="button"
-                  onClick={addNewWordPair}
-                  className="add-word-btn"
-                  disabled={isLoading}
-                >
-                  ➕ Добавить слово
-                </button>
-              </div>
-            )}
+            <div className="add-word-section">
+              <button
+                type="button"
+                onClick={addNewWordPair}
+                className="add-word-btn"
+                disabled={isLoading}
+              >
+                ➕ Добавить слово
+              </button>
+            </div>
           </div>
 
           {/* Общие ошибки */}
