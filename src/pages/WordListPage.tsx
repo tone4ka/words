@@ -431,12 +431,27 @@ const WordListPage: React.FC = () => {
     return () => window.removeEventListener("keydown", handleKeyPress);
   }, [gameStep, handleKeyPress]);
 
-  // Автофокус инпута на четвертом шаге при смене пар
+  // Автофокус инпута на четвертом шаге при смене пар и после скрытия подсказки
   useEffect(() => {
     if (gameStep === 4 && textInputRef.current) {
       textInputRef.current.focus();
     }
-  }, [gameStep, currentPairIndex]);
+  }, [gameStep, currentPairIndex, showCorrectAnswer]);
+
+  // Функция для обработки кнопки Help на четвертом шаге
+  const handleStep4HelpClick = useCallback(() => {
+    // Предотвращаем повторное нажатие, если подсказка уже показана
+    if (showCorrectAnswer) return;
+
+    setShowCorrectAnswer(true);
+    setTimeout(() => {
+      setShowCorrectAnswer(false);
+      // Восстанавливаем фокус после скрытия подсказки
+      if (textInputRef.current) {
+        textInputRef.current.focus();
+      }
+    }, 4000);
+  }, [showCorrectAnswer]);
 
   // Функции для четвертого шага (ввод текста)
   const handleTextSubmit = useCallback(() => {
@@ -494,6 +509,13 @@ const WordListPage: React.FC = () => {
       setInputHighlight("incorrect");
       setShowCorrectAnswer(true);
       setShowNextButton(true);
+
+      // Восстанавливаем фокус через небольшую задержку
+      setTimeout(() => {
+        if (textInputRef.current) {
+          textInputRef.current.focus();
+        }
+      }, 100);
     }
   }, [
     textInput,
@@ -913,10 +935,7 @@ const WordListPage: React.FC = () => {
               <div className="game-instruction">Введите слово:</div>
               <button
                 className="help-btn"
-                onClick={() => {
-                  setShowCorrectAnswer(true);
-                  setTimeout(() => setShowCorrectAnswer(false), 4000);
-                }}
+                onClick={handleStep4HelpClick}
                 title="Показать правильный ответ"
               >
                 💡 Help
@@ -935,8 +954,12 @@ const WordListPage: React.FC = () => {
                 } ${inputHighlight === "incorrect" ? "input-incorrect" : ""}`}
                 placeholder="Введите слово..."
                 onKeyPress={(e) => {
-                  if (e.key === "Enter" && !showNextButton) {
-                    handleTextSubmit();
+                  if (e.key === "Enter") {
+                    if (showNextButton) {
+                      handleStep4Next();
+                    } else {
+                      handleTextSubmit();
+                    }
                   }
                 }}
               />
