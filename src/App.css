@@ -2054,6 +2054,17 @@ body {
   animation: letterHelpPulse 0.3s ease-in-out;
 }
 
+/* Стиль для использованных букв */
+.letter-btn.used {
+  opacity: 0.3;
+  pointer-events: none;
+  background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e0 100%);
+  border-color: #cbd5e0;
+  color: #a0aec0;
+  transform: none;
+  box-shadow: none;
+}
+
 @keyframes letterHelpPulse {
   0% {
     transform: scale(1.15);

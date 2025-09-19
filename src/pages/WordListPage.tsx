@@ -94,6 +94,9 @@ const WordListPage: React.FC = () => {
   // Состояния для третьего шага (ввод по буквам)
   const [inputSlots, setInputSlots] = useState<string[]>([]);
   const [availableLetters, setAvailableLetters] = useState<string[]>([]);
+  const [usedLetterIndices, setUsedLetterIndices] = useState<Set<number>>(
+    new Set()
+  );
   const [hasError, setHasError] = useState(false);
   const [errorSlotIndex, setErrorSlotIndex] = useState<number>(-1);
   const [highlightedLetterIndex, setHighlightedLetterIndex] =
@@ -266,6 +269,7 @@ const WordListPage: React.FC = () => {
 
     setInputSlots(slots);
     setAvailableLetters(shuffledLetters);
+    setUsedLetterIndices(new Set()); // Сбрасываем использованные буквы
     setHasError(false);
     setErrorSlotIndex(-1);
   }, []);
@@ -279,7 +283,7 @@ const WordListPage: React.FC = () => {
   }, []);
 
   const handleLetterClick = useCallback(
-    (letter: string) => {
+    (letter: string, letterIndex: number) => {
       const currentWord = wordPairs[currentPairIndex].value.toLowerCase();
       const nextEmptySlotIndex = inputSlots.findIndex((slot) => slot === "");
 
@@ -293,13 +297,8 @@ const WordListPage: React.FC = () => {
         newSlots[nextEmptySlotIndex] = letter;
         setInputSlots(newSlots);
 
-        // Убираем букву из доступных
-        const newAvailableLetters = [...availableLetters];
-        const letterIndex = newAvailableLetters.indexOf(letter);
-        if (letterIndex > -1) {
-          newAvailableLetters.splice(letterIndex, 1);
-          setAvailableLetters(newAvailableLetters);
-        }
+        // Помечаем букву как использованную (делаем прозрачной)
+        setUsedLetterIndices((prev) => new Set([...prev, letterIndex]));
 
         // Проверяем, заполнены ли все слоты
         if (newSlots.every((slot) => slot !== "")) {
@@ -398,7 +397,6 @@ const WordListPage: React.FC = () => {
     },
     [
       inputSlots,
-      availableLetters,
       currentPairIndex,
       wordPairs,
       hasError,
@@ -416,11 +414,21 @@ const WordListPage: React.FC = () => {
       if (gameStep !== 3) return;
 
       const letter = event.key.toLowerCase();
-      if (availableLetters.includes(letter)) {
-        handleLetterClick(letter);
+
+      // Находим первый неиспользованный индекс буквы
+      let letterIndex = -1;
+      for (let i = 0; i < availableLetters.length; i++) {
+        if (availableLetters[i] === letter && !usedLetterIndices.has(i)) {
+          letterIndex = i;
+          break;
+        }
+      }
+
+      if (letterIndex !== -1) {
+        handleLetterClick(letter, letterIndex);
       }
     },
-    [gameStep, availableLetters, handleLetterClick]
+    [gameStep, availableLetters, usedLetterIndices, handleLetterClick]
   );
 
   // Обработка клавиатуры для третьего шага
@@ -710,11 +718,12 @@ const WordListPage: React.FC = () => {
     const currentWord = wordPairs[currentPairIndex].value.toLowerCase();
     const correctLetter = currentWord[nextEmptySlotIndex];
 
-    // Находим индекс этой буквы в доступных буквах
+    // Находим индекс этой буквы в доступных буквах, исключая уже использованные
     const letterIndex = availableLetters.findIndex(
-      (letter) => letter === correctLetter
+      (letter, index) =>
+        letter === correctLetter && !usedLetterIndices.has(index)
     );
-    if (letterIndex === -1) return; // Буква не найдена
+    if (letterIndex === -1) return; // Буква не найдена или уже использована
 
     setIsHelpActive(true);
     setHighlightedLetterIndex(letterIndex);
@@ -731,6 +740,7 @@ const WordListPage: React.FC = () => {
     wordPairs,
     currentPairIndex,
     availableLetters,
+    usedLetterIndices,
   ]);
 
   useEffect(() => {
@@ -919,8 +929,9 @@ const WordListPage: React.FC = () => {
                   key={`${letter}-${index}`}
                   className={`letter-btn ${
                     highlightedLetterIndex === index ? "help-highlight" : ""
-                  }`}
-                  onClick={() => handleLetterClick(letter)}
+                  } ${usedLetterIndices.has(index) ? "used" : ""}`}
+                  onClick={() => handleLetterClick(letter, index)}
+                  disabled={usedLetterIndices.has(index)}
                 >
                   {letter.toUpperCase()}
                 </button>
