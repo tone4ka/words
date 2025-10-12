@@ -1,31 +1,31 @@
 /* Подключение шрифтов Comic Sans MS */
 @font-face {
-  font-family: 'Comic Sans MS';
-  src: url('./assets/fonts/COMIC.TTF') format('truetype');
+  font-family: "Comic Sans MS";
+  src: url("./assets/fonts/COMIC.TTF") format("truetype");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Comic Sans MS';
-  src: url('./assets/fonts/COMICBD.TTF') format('truetype');
+  font-family: "Comic Sans MS";
+  src: url("./assets/fonts/COMICBD.TTF") format("truetype");
   font-weight: bold;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Comic Sans MS';
-  src: url('./assets/fonts/COMICI.TTF') format('truetype');
+  font-family: "Comic Sans MS";
+  src: url("./assets/fonts/COMICI.TTF") format("truetype");
   font-weight: normal;
   font-style: italic;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Comic Sans MS';
-  src: url('./assets/fonts/COMICZ.TTF') format('truetype');
+  font-family: "Comic Sans MS";
+  src: url("./assets/fonts/COMICZ.TTF") format("truetype");
   font-weight: bold;
   font-style: italic;
   font-display: swap;
@@ -1329,7 +1329,7 @@ body {
   padding: 1rem;
   border: 2px solid rgba(108, 92, 231, 0.3);
   border-radius: 15px;
-  font-size: 1.1rem;
+  font-size: 18px;
   font-family: "Comic Sans MS", cursive;
   background: rgba(255, 255, 255, 0.9);
   transition: all 0.3s ease;
@@ -1385,6 +1385,7 @@ body {
   border: 2px solid rgba(108, 92, 231, 0.3);
   border-radius: 10px;
   font-family: "Comic Sans MS", cursive;
+  font-size: 16px;
   background: rgba(255, 255, 255, 0.9);
   transition: all 0.3s ease;
 }
