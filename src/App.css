@@ -1,3 +1,36 @@
+/* Подключение шрифтов Comic Sans MS */
+@font-face {
+  font-family: 'Comic Sans MS';
+  src: url('./assets/fonts/COMIC.TTF') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Comic Sans MS';
+  src: url('./assets/fonts/COMICBD.TTF') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Comic Sans MS';
+  src: url('./assets/fonts/COMICI.TTF') format('truetype');
+  font-weight: normal;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Comic Sans MS';
+  src: url('./assets/fonts/COMICZ.TTF') format('truetype');
+  font-weight: bold;
+  font-style: italic;
+  font-display: swap;
+}
+
 :root {
   font-family: "Comic Sans MS", cursive, Inter, system-ui, Avenir, Helvetica,
     Arial, sans-serif;
